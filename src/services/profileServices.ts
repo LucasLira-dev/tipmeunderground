@@ -18,7 +18,7 @@ interface UserProfileResponse {
 }
 
 class ProfileService {
-    private baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+    private baseURL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
 
     private async makeRequest(
         endpoint: string,
