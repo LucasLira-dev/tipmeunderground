@@ -28,7 +28,7 @@ export function useAvatarSettings() {
         setAvatarSelecionado(session.user.avatar);
       }
     }
-  }, [session?.user?.avatar]); // ← CORRIGIR: Dependência específica
+  }, [session?.user?.avatar, avatarSelecionado, avatarAtual]); // ← CORRIGIR: Dependência específica
 
   // ← FUNÇÃO PARA SELECIONAR AVATAR
   const handleAvatarSelect = (avatar: string) => {

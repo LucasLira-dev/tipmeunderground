@@ -1,5 +1,6 @@
 
 // src/components/Settings/AvatarSection.tsx
+import Image from "next/image";
 import { BiCheck } from "react-icons/bi";
 
 interface AvatarSectionProps {
@@ -42,14 +43,13 @@ export function AvatarSection({
       
       <div className="flex flex-col items-center gap-4">
         {/* ← CORRIGIR: Mostrar avatar atual sempre, selecionado apenas visualmente */}
-        <div className="relative">
-          <img
+        <div className="relative w-24 h-24">
+          <Image
             src={avatarParaMostrar}
             alt={avatarEfetivamenteMudou ? "Novo Avatar Selecionado" : "Avatar Atual"}
-            className="w-24 h-24 rounded-full border-2 border-[var(--bright-azure)] object-cover"
-            onError={(e) => {
+            className=" rounded-full border-2 border-[var(--bright-azure)] object-cover"
+            onError={() => {
               console.error("❌ Erro ao carregar avatar:", avatarAtual);
-              e.currentTarget.src = "/default-avatar.jpg"; // ← Fallback
             }}
           />
           
@@ -63,11 +63,11 @@ export function AvatarSection({
         
         <div className="grid grid-cols-4 gap-2">
           {avatars.map((avatar, index) => (
-            <div key={index} className="relative">
-              <img
+            <div key={index} className="relative w-16 h-16">
+              <Image
                 src={avatar}
                 alt={`Avatar ${index + 1}`}
-                className={`w-16 h-16 rounded-full cursor-pointer border-2 transition-all object-cover ${
+                className={`rounded-full cursor-pointer border-2 transition-all object-cover ${
                   avatarSelecionado === avatar
                     ? "border-[var(--bright-azure)] scale-110"
                     : avatarAtual === avatar
@@ -75,9 +75,8 @@ export function AvatarSection({
                     : "border-transparent hover:border-[var(--soft-cyan)]"
                 }`}
                 onClick={() => onAvatarSelect(avatar)}
-                onError={(e) => {
+                onError={() => {
                   console.error("❌ Erro ao carregar avatar da galeria:", avatar);
-                  e.currentTarget.src = "/default-avatar.jpg";
                 }}
               />
               

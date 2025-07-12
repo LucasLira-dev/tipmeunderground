@@ -24,7 +24,7 @@ class ProfileService {
         endpoint: string,
         method: "GET" | "POST" | "PATCH" | "DELETE",
         token?: string,
-        data?: string | any
+        data?: string | unknown
     ) {
         const headers: Record<string, string> = {
             "Content-Type": "application/json",
