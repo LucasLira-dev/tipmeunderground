@@ -2,7 +2,10 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
 
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "https://tipme-backend.onrender.com";
+
 const authOptions: NextAuthOptions = {
+
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -19,7 +22,7 @@ const authOptions: NextAuthOptions = {
         }
 
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/login`, {
+          const res = await fetch(`${backendUrl}/users/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -60,8 +63,9 @@ const authOptions: NextAuthOptions = {
       if (user) {
         token.accessToken = user.token;
 
-        try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/all-info`, {
+        try { 
+
+          const res = await fetch(`${backendUrl}/users/all-info`, {
             method: "GET",
             headers: {
               Authorization: `Bearer ${user.token}`,
@@ -106,7 +110,7 @@ const authOptions: NextAuthOptions = {
   },
 
   pages: {
-    signIn: "/login",
+    signIn: "/",
   },
 
   secret: process.env.NEXTAUTH_SECRET,

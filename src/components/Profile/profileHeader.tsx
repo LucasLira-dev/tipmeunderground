@@ -84,7 +84,7 @@ export default function ProfileHeader({ userId }: ProfileHeaderProps) {
                 </Link>
               )}
 
-              { userData.userLink2 && (
+              { userData.userLink3 && (
                  <Link
                 href={userData.userLink3 || "#"}
                 className="flex gap-1 items-center">

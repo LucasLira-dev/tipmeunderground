@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 
 import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
+import { FaMusic, FaSignOutAlt, FaUser } from "react-icons/fa";
 
 interface TokenPayload {
     userId: string;
@@ -54,31 +55,54 @@ export default function HomeClientPage() {
     };
 
     return (
-        <div className="flex flex-col gap-2 items-center justify-center min-h-screen bg-black">
-            <h1 className="text-white"> home page </h1>
+        <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
+           {/* Header */}
+           <header className="border-b border-gray-800 bg-black/50 backdrop-blur-md sticky top-0 z-50">
+               <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+                   <div className="flex items-center gap-3">
+                       <div className="w-10 h-10 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full flex items-center justify-center">
+                           <FaMusic className="text-black text-lg" />
+                       </div>
+                       <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                           TipMe Underground
+                       </h1>
+                   </div>
 
-              {/* ← MOSTRAR INFORMAÇÕES DO TOKEN */}
-            {userId ? (
-                <div className="text-white bg-gray-800 p-4 rounded-lg">
-                <p>👤 User ID: {userId}</p>
-                <p>📧 Email: {session?.user?.email}</p>
-                <p>🔐 Token: {session?.accessToken?.substring(0, 20)}...</p>
-                </div>
-            ) : (
-                <p className="text-white">❌ Usuário não autenticado</p>
-            )}
+                   <button 
+                       onClick={limparAutenticacao}
+                       className="flex items-center gap-2 text-gray-300 hover:text-red-400 transition-colors group">
+                       <FaSignOutAlt className="group-hover:rotate-12 transition-transform" />
+                       <span>Sair</span>
+                   </button>
+               </div>
+           </header>
 
-            <button onClick={limparAutenticacao} className="text-white">
-                Sair da conta
-            </button>
+           {/* Hero Section */}
+           <section className="max-w-6xl mx-auto px-4 py-16 text-center">
+               <div className="mb-8">
+                   <h2 className="text-5xl md:text-6xl font-bold text-white mb-4">
+                       Bem-vindo, <br />
+                       <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                           Estranho
+                       </span>
+                   </h2>
+                   <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                       Sua plataforma para conectar-se com fãs, compartilhar sua arte e receber apoio para seus projetos musicais.
+                   </p>
+               </div>
 
-            <Link href={`/profile/${userId}`}>
-                <button className="text-white bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded">
-                    Ir para o perfil-
-                </button>
-            </Link>
-            
-            <LoginDialog />
+               {/* Action Buttons */}
+               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+                   <Link href={`/profile/${userId}`}>
+                       <button className="group flex items-center gap-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:scale-105 transition-all shadow-lg hover:shadow-cyan-500/25">
+                           <FaUser className="group-hover:scale-110 transition-transform" />
+                           Ver Meu Perfil
+                       </button>
+                   </Link>
+
+                    <LoginDialog/>
+               </div>
+           </section>
         </div>
     )
 }

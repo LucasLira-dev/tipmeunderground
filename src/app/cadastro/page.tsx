@@ -24,8 +24,13 @@ async function CadastrarUsuario(
 
     try {
 
+         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://tipme-backend.onrender.com';
+    
+        console.log("🔄 Tentando cadastrar em:", `${backendUrl}/users/register`);
+        console.log("📦 Dados enviados:", userData);
+        
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/register`, {
+        const response = await fetch(`${backendUrl}/users/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
