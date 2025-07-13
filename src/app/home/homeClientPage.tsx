@@ -1,34 +1,41 @@
+// src/app/home/homeClientPage.tsx
 "use client"
 
 import { LoginDialog } from "@/components/Dialog/LoginDialog";
 import { signOut, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-
 import { jwtDecode } from "jwt-decode";
-import Link from "next/link";
-import { FaMusic, FaSignOutAlt, FaUser } from "react-icons/fa";
+import { FaMusic, FaSignOutAlt, FaUser, FaExclamationTriangle } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { LoadingSpinner } from "@/components/Loading/spinner";
 
 interface TokenPayload {
     userId: string;
 }
 
 export default function HomeClientPage() {
-
-   const { data: session } = useSession();
+   const { data: session, status } = useSession();
    const [userId, setUserId] = useState<string | null>(null);
+   const router = useRouter();
+
+   // ← ADICIONAR: Redirecionar se não estiver autenticado
+   useEffect(() => {
+       if (status === "loading") return; // Aguarda verificação de sessão
+       
+       if (!session) {
+           console.log("❌ Usuário não autenticado, redirecionando para /");
+           router.push("/");
+           return;
+       }
+   }, [session, status, router]);
 
    useEffect(() => {
        if (session?.accessToken) {
-
         try {
-           //decodificar o token JWT
            const decoded = jwtDecode<TokenPayload>(session.accessToken);
            console.log("User ID:", decoded.userId);
-
-           //extrair o userId do token JWT
            const userIdFromToken = decoded.userId;
            console.log("User ID from token:", userIdFromToken);
-
            setUserId(userIdFromToken);
        } catch (error) {
            console.error("Erro ao decodificar o token JWT:", error);
@@ -40,22 +47,46 @@ export default function HomeClientPage() {
     }
    }, [session]);
 
-        // Função para limpar tudo e redirecionar
-    const limparAutenticacao = async () => {
+   const limparAutenticacao = async () => {
     await signOut({ 
-        redirect: false // Não redireciona automaticamente
+        redirect: false
     });
     
-    // Opcional: limpar localStorage/sessionStorage também
     localStorage.clear();
     sessionStorage.clear();
     
-    // Redirecionar manualmente
-    window.location.href = '/cadastro';
-    };
+    window.location.href = '/';
+   };
 
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
+   
+
+   const handleNavigateToProfile = () => {
+       // Profile é público, navegar diretamente
+       if (userId) {
+           window.location.href = `/profile/${userId}`;
+       } else {
+           console.log("⚠️ Nenhum userId disponível para o perfil");
+       }
+   };
+
+   // ← ADICIONAR: Mostrar loading enquanto verifica sessão
+   if (status === "loading") {
+       return (
+           <div className="flex items-center justify-center h-screen bg-black">
+               <LoadingSpinner size="lg" text="Carregando..." />
+           </div>
+       );
+   }
+
+   // ← ADICIONAR: Se não está autenticado, não mostra nada (está redirecionando)
+   if (!session) {
+       return null;
+   }
+
+   const userDisplayName = session?.user?.artistName || session?.user?.userName || "Artista";
+
+   return (
+       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
            {/* Header */}
            <header className="border-b border-gray-800 bg-black/50 backdrop-blur-md sticky top-0 z-50">
                <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -83,7 +114,7 @@ export default function HomeClientPage() {
                    <h2 className="text-5xl md:text-6xl font-bold text-white mb-4">
                        Bem-vindo, <br />
                        <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-                           Estranho
+                           {userDisplayName}
                        </span>
                    </h2>
                    <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
@@ -91,18 +122,75 @@ export default function HomeClientPage() {
                    </p>
                </div>
 
-               {/* Action Buttons */}
-               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-                   <Link href={`/profile/${userId}`}>
-                       <button className="group flex items-center gap-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:scale-105 transition-all shadow-lg hover:shadow-cyan-500/25">
+               {/* Aviso sobre configuração */}
+               <div className="bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border border-orange-500/30 rounded-xl p-6 mb-8 max-w-4xl mx-auto">
+                   <div className="flex items-center justify-center gap-3 mb-4">
+                       <FaExclamationTriangle className="text-orange-400 text-2xl" />
+                       <h3 className="text-xl font-semibold text-orange-300">Configure seu Perfil</h3>
+                   </div>
+                   <p className="text-gray-300 mb-4">
+                       {/* eslint-disable-next-line react/no-unescaped-entities */}
+                       Clique em "Configurar Perfil" para acessar as configurações e personalizar suas informações, 
+                       links das redes sociais e dados para receber apoios.
+                   </p>
+                   
+                   <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                     <LoginDialog />
+                       
+                       <button 
+                           onClick={handleNavigateToProfile}
+                           className="group flex items-center gap-3 bg-gray-700 border border-gray-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-600 transition-all">
                            <FaUser className="group-hover:scale-110 transition-transform" />
                            Ver Meu Perfil
                        </button>
-                   </Link>
+                   </div>
+               </div>
 
-                    <LoginDialog/>
+               {/* Lista de etapas */}
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
+                   <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 text-center">
+                       <div className="w-12 h-12 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                           <span className="text-cyan-400 font-bold text-xl">1</span>
+                       </div>
+                       <h4 className="text-white font-semibold mb-2">Informações Básicas</h4>
+                       <p className="text-gray-400 text-sm">
+                           Nome artístico, bio, foto de perfil
+                       </p>
+                   </div>
+
+                   <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 text-center">
+                       <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                           <span className="text-blue-400 font-bold text-xl">2</span>
+                       </div>
+                       <h4 className="text-white font-semibold mb-2">Redes Sociais</h4>
+                       <p className="text-gray-400 text-sm">
+                           Links do Instagram, Spotify, YouTube
+                       </p>
+                   </div>
+
+                   <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 text-center">
+                       <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                           <span className="text-green-400 font-bold text-xl">3</span>
+                       </div>
+                       <h4 className="text-white font-semibold mb-2">Dados do PIX</h4>
+                       <p className="text-gray-400 text-sm">
+                           Configure para receber apoios
+                       </p>
+                   </div>
+               </div>
+
+               {/* Call to action */}
+               <div className="bg-gradient-to-r from-cyan-500/10 to-blue-600/10 border border-cyan-500/20 rounded-3xl p-8 flex flex-col justify-center items-center">
+                   <h3 className="text-2xl font-bold text-white mb-4">
+                       Pronto para configurar?
+                   </h3>
+                   <p className="text-gray-400 text-lg mb-6">
+                       Acesse as configurações para personalizar seu perfil e começar a receber apoio dos seus fãs!
+                   </p>
+                    <LoginDialog />
                </div>
            </section>
-        </div>
-    )
+
+       </div>
+   )
 }

@@ -8,6 +8,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert";
+import { useEffect } from "react";
 
 
 interface IAlertProps {
@@ -15,9 +16,21 @@ interface IAlertProps {
   message: string;
   type: "success" | "error";
   onClose?: () => void;
+  autoClose?: boolean; 
+  autoCloseDelay?: number; 
 }
 
-export function SettingsAlert({ title, message, type, onClose }: IAlertProps) {
+export function SettingsAlert({ title, message, type, onClose, autoClose = true, autoCloseDelay = 3000 }: IAlertProps) {
+
+  useEffect(() => {
+    if (autoClose && onClose) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, autoCloseDelay);
+
+      return () => clearTimeout(timer); // Limpa o timer quando o componente é desmontado ou quando autoCloseDelay muda
+    }
+  }, [autoClose, autoCloseDelay, onClose]);
 
   return (
      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] w-full max-w-lg px-4 
@@ -41,8 +54,7 @@ export function SettingsAlert({ title, message, type, onClose }: IAlertProps) {
           {message}
         </AlertDescription>
 
-        {/* Botão OK */}
-        {onClose && (
+        {/* {onClose && (
           <div className="mt-4 ">
             <button
               onClick={onClose}
@@ -57,7 +69,7 @@ export function SettingsAlert({ title, message, type, onClose }: IAlertProps) {
               OK
             </button>
           </div>
-        )}
+        )} */}
       </Alert>
     </div>
   )

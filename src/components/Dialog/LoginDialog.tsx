@@ -106,8 +106,8 @@ export function LoginDialog({open, onOpenChange}: ILoginDialogProps) {
     open={open}
     onOpenChange={onOpenChange}>
         <DialogTrigger asChild>
-          <button className="max-w-[200px] flex items-center gap-2 font-semibold text-[var(--error-icon)] py-2 px-4 border-2 border-[var(--error-border)] rounded-lg focus:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200 cursor-pointer">
-            Configurações
+          <button className=" bg-[#142B52] flex items-center gap-2 font-bold text-white px-8 py-4  border-2 border-[#041325] rounded-lg focus:border-[#041325] focus:outline-none focus:ring-2 focus:ring-[#041325] transition duration-200 cursor-pointer text-lg">
+            Configurar Perfil
           </button>
         </DialogTrigger>
         <DialogContent className="bg-[var(--midnight-black)] border border-[var(--soft-presence)] [&>button]:text-white [&>button]:hover:bg-gray-700 [&>button]:p-2 [&>button]:rounded-md [&>button]:cursor-pointer">
@@ -150,7 +150,7 @@ export function LoginDialog({open, onOpenChange}: ILoginDialogProps) {
                 />
                 <span
                   onClick={() => setPasswordVisible(!passwordVisible)}
-                  className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+                  className="absolute inset-y-0 right-3 flex items-center justify-center cursor-pointer"
                 >
                   {passwordVisible ? (
                     <FaRegEyeSlash className="text-sky-400" />

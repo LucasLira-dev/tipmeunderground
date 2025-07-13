@@ -19,17 +19,16 @@ async function CadastrarUsuario(
         userPassword: string | FormDataEntryValue | null
     },
     router: ReturnType<typeof useRouter>,
-    setErro: (msg: string) => void
+    setErro: (msg: string) => void,
+    setIsLoading: (loading: boolean) => void
 ) {
 
     try {
 
+         setIsLoading(true)
+
          const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://tipme-backend.onrender.com';
     
-        console.log("🔄 Tentando cadastrar em:", `${backendUrl}/users/register`);
-        console.log("📦 Dados enviados:", userData);
-        
-
         const response = await fetch(`${backendUrl}/users/register`, {
             method: 'POST',
             headers: {
@@ -40,16 +39,37 @@ async function CadastrarUsuario(
 
         const data = await response.json();
 
+        
         if (!response.ok) {
-            setErro(data.message || 'Erro ao cadastrar usuário');
-            throw new Error(data.message || 'Erro ao cadastrar usuário');
+            // ← CORRIGIR: Tratar múltiplos erros
+            let errorMessage = 'Erro ao cadastrar usuário';
+            
+            if (data.message) {
+                // Se é array de erros
+                if (Array.isArray(data.message)) {
+                    errorMessage = data.message.join('. ');
+                } else {
+                    errorMessage = data.message;
+                }
+            } else if (data.error) {
+                // Se é array de erros no campo error
+                if (Array.isArray(data.error)) {
+                    errorMessage = data.error.join('. ');
+                } else {
+                    errorMessage = data.error;
+                }
+            } else if (data.errors) {
+                // Se tem campo errors (plural)
+                if (Array.isArray(data.errors)) {
+                    errorMessage = data.errors.join('. ');
+                } else {
+                    errorMessage = String(data.errors);
+                }
+            }
+            
+            setErro(errorMessage);
+            return;
         }
-
-        // ← Capturar o userId da resposta
-        const userId = data.userId || data.user?.userId;
-        console.log("UserId capturado:", userId); // Debug
-
-        alert('Usuário cadastrado com sucesso!');
 
         // Login automático após cadastro bem-sucedido
         const result = await signIn("credentials", {
@@ -64,14 +84,17 @@ async function CadastrarUsuario(
 
         return data;
     } catch (error) {
-        setErro('Erro desconhecido');
-        console.error("Erro ao cadastrar usuário:", error);
+        const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+        setErro(errorMessage);
+    } finally {
+        setIsLoading(false)
     }
 }
 
 export default function CadastroPage() {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [erro, setErro] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const { data: session, status } = useSession();
     console.log("Sessão atual:", session); // Verifica se está salva
@@ -99,7 +122,6 @@ export default function CadastroPage() {
         return null;
     }
 
-
     return (
         <div
         className="bg-black w-full h-screen flex items-center justify-center">
@@ -122,7 +144,7 @@ export default function CadastroPage() {
                             userName: formData.get('name'),
                             userMail: formData.get('email'),
                             userPassword: formData.get('password'),
-                        }, router, setErro);
+                        }, router, setErro, setIsLoading);
                     }}
                     className="w-full max-w-md mt-6 "
                 >
@@ -169,7 +191,7 @@ export default function CadastroPage() {
                     <button
                         type="submit"
                         className="mt-6 w-full bg-sky-400 hover:bg-sky-300 text-black font-semibold py-2 px-4 rounded-lg focus:border-sky-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition duration-200">
-                           Criar Conta
+                           { isLoading ? "Carregando..." : "Criar Conta" }
                     </button>
 
                     <p

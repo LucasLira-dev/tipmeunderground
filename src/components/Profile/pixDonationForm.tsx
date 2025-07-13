@@ -144,7 +144,7 @@ import { X, Copy, QrCode } from 'lucide-react';
 
 interface PixDonationFormProps {
   userId: string;
-  userName?: string; // opcional, caso queira exibir o nome do usuário
+  userName?: string | null; // opcional, caso queira exibir o nome do usuário
 }
 
 export function PixDonationForm({ userId, userName }: PixDonationFormProps) {

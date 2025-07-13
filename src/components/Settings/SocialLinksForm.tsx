@@ -70,18 +70,6 @@ export function SocialLinksForm({
             placeholder="https://youtube.com/@seu_usuario"
           />
         </div>
-
-        <div>
-          <label className="text-[var(--soft-cyan)] text-sm font-semibold">
-            SoundCloud
-          </label>
-          <input
-            type="url"
-            // onChange={(e) => onUpdateField("soundcloud", e.target.value)}
-            placeholder="https://soundcloud.com/seu_usuario"
-            className="w-full p-3 bg-black/50 border border-sky-400/30 focus:border-sky-300 rounded-md focus:outline-none text-sky-100 mt-1"
-          />
-        </div>
       </div>
     </article>
   );

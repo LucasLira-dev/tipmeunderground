@@ -45,6 +45,8 @@ export function AvatarSection({
         {/* ← CORRIGIR: Mostrar avatar atual sempre, selecionado apenas visualmente */}
         <div className="relative w-24 h-24">
           <Image
+            width={96}
+            height={96}
             src={avatarParaMostrar}
             alt={avatarEfetivamenteMudou ? "Novo Avatar Selecionado" : "Avatar Atual"}
             className=" rounded-full border-2 border-[var(--bright-azure)] object-cover"
@@ -65,6 +67,8 @@ export function AvatarSection({
           {avatars.map((avatar, index) => (
             <div key={index} className="relative w-16 h-16">
               <Image
+                width={64}
+                height={64}
                 src={avatar}
                 alt={`Avatar ${index + 1}`}
                 className={`rounded-full cursor-pointer border-2 transition-all object-cover ${
