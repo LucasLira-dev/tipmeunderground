@@ -229,13 +229,13 @@ export function useSettingsForm() {
       });
     }
 
-    // Verificar se precisa de senha atual
-    const needsPassword = 
+    // Verificar se precisa de senha atual (apenas para userName, email ou senha)
+    const hasProfileChanges = 
       formData.userName.trim() !== (dadosSalvos.userName || "").trim() ||
       formData.email.trim() !== (dadosSalvos.email || "").trim() ||
       formData.senhaNova.trim() !== "";
 
-    if (needsPassword && !formData.senhaAtual.trim()) {
+    if (hasProfileChanges && !formData.senhaAtual.trim()) {
       throw new Error("Digite sua senha atual para alterar nome de usuário, email ou senha.");
     }
 
@@ -263,15 +263,24 @@ export function useSettingsForm() {
       throw new Error("O email informado não é válido.");
     }
 
-    // Validar links
-    if (formData.instagram.trim() && !isValidInstagram(formData.instagram)) {
-      throw new Error("O link do Instagram não é válido.");
+    // Validar links (apenas se preenchidos)
+    if (formData.instagram.trim()) {
+      console.log("🔍 Validando Instagram:", formData.instagram);
+      if (!isValidInstagram(formData.instagram)) {
+        throw new Error("O link do Instagram não é válido.");
+      }
     }
-    if (formData.spotify.trim() && !isValidSpotify(formData.spotify)) {
-      throw new Error("O link do Spotify não é válido.");
+    if (formData.spotify.trim()) {
+      console.log("🔍 Validando Spotify:", formData.spotify);
+      if (!isValidSpotify(formData.spotify)) {
+        throw new Error("O link do Spotify não é válido.");
+      }
     }
-    if (formData.youtube.trim() && !isValidYoutube(formData.youtube)) {
-      throw new Error("O link do YouTube não é válido.");
+    if (formData.youtube.trim()) {
+      console.log("🔍 Validando YouTube:", formData.youtube);
+      if (!isValidYoutube(formData.youtube)) {
+        throw new Error("O link do YouTube não é válido.");
+      }
     }
   };
 
@@ -282,17 +291,20 @@ export function useSettingsForm() {
   };
 
   const isValidInstagram = (link: string) => {
+    // Aceita links do Instagram com ou sem www
     const regex = /^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._]+\/?$/;
     return regex.test(link);
   };
 
   const isValidSpotify = (link: string) => {
+    // Aceita links do Spotify para artist ou user
     const regex = /^https:\/\/open\.spotify\.com\/(artist|user)\/[a-zA-Z0-9]+(\?.*)?$/;
     return regex.test(link);
   };
 
   const isValidYoutube = (link: string) => {
-    const regex = /^https:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._\-]+)(\?.*)?$/;
+    // Aceita links do YouTube com @ ou channel
+    const regex = /^https:\/\/(www\.)?youtube\.com\/(@[a-zA-Z0-9._\-]+|channel\/[a-zA-Z0-9._\-]+)(\?.*)?$/;
     return regex.test(link);
   };
 
@@ -301,6 +313,10 @@ export function useSettingsForm() {
     setSalvandoPerfil(true);
 
     try {
+      console.log("🚀 Iniciando salvamento...");
+      console.log("📝 Dados atuais:", formData);
+      console.log("💾 Dados salvos:", dadosSalvos);
+      
       // Validar formulário
       validateForm();
 
@@ -366,6 +382,8 @@ export function useSettingsForm() {
         throw new Error("Nenhuma alteração detectada para salvar.");
       }
 
+      console.log("📤 Enviando atualizações:", updates);
+
       // Executar atualizações
       const responses = await settingsService.updateMultipleFields(
         updates,
@@ -375,7 +393,12 @@ export function useSettingsForm() {
       const allSuccessful = responses.every((response) => response.ok);
 
       if (!allSuccessful) {
-        throw new Error("Houve um erro ao salvar as alterações.");
+        console.error("❌ Algumas requisições falharam:", responses);
+        const failedResponses = responses.filter(response => !response.ok);
+        const errorDetails = failedResponses.map((response, index) => 
+          `Requisição ${index + 1}: ${response.status} - ${response.statusText}`
+        ).join(", ");
+        throw new Error(`Erro ao salvar: ${errorDetails}`);
       }
 
       // Atualizar estado local
