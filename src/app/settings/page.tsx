@@ -2,7 +2,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LoadingSpinner } from "@/components/Loading/spinner";
 import { SettingsAlert } from "@/components/Alert/SettingsAlert";
 import { useSettingsForm } from "@/hooks/useSettingsForm";
@@ -15,11 +15,44 @@ import { ProfileInfoForm } from "@/components/Settings/ProfileInfoForm";
 import { SocialLinksForm } from "@/components/Settings/SocialLinksForm";
 import { AccountSettingsForm } from "@/components/Settings/AccountSettingsForm";
 import { PaymentSettingsForm } from "@/components/Settings/PaymentSettingsForm";
-import { SettingsActions } from "@/components/Settings/SettingsActions";
+import { SettingsActions } from "@/components/Settings/SettingsActions";  
+
+import { useRouter } from "next/navigation"
+import { jwtDecode } from "jwt-decode";
+
+interface TokenPayload {
+  exp: number;
+}
 
 export default function SettingsPage() {
-  const { status } = useSession();
+   const { status, data: session } = useSession();
+  const router = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [verificandoToken, setVerificandoToken] = useState(true);
+
+  // Verificação do token
+  useEffect(() => {
+    if (status === "loading") return;
+
+    //se 
+    if (!session?.accessToken) {
+      router.push("/home");
+      return;
+    }
+
+    try {
+      const decoded = jwtDecode<TokenPayload>(session.accessToken);
+      const now = Date.now() / 1000;
+      if (decoded.exp <= now) {
+        router.push("/home");
+        return;
+      }
+    } catch {
+      router.push("/home");
+      return;
+    }
+    setVerificandoToken(false);
+  }, [session, status, router]);
   
   const {
     formData,
@@ -46,7 +79,7 @@ export default function SettingsPage() {
 
   console.log("Status:", status, "Página carregada:", paginaCarregada); // ← DEBUG
 
-  if (!paginaCarregada) {
+  if (!paginaCarregada || verificandoToken) {
     console.log("mostrando loading")
     return (
       <div className="flex items-center justify-center h-screen bg-black">

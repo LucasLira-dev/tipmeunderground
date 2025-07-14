@@ -1,7 +1,7 @@
 // src/app/home/homeClientPage.tsx
 "use client"
 
-import { LoginDialog } from "@/components/Dialog/LoginDialog";
+import BotaoDialog from "@/components/Dialog/BotaoDialog";
 import { signOut, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
@@ -135,8 +135,9 @@ export default function HomeClientPage() {
                    </p>
                    
                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                     <LoginDialog />
-                       
+                     {/* <LoginDialog /> */}
+                     <BotaoDialog/>
+
                        <button 
                            onClick={handleNavigateToProfile}
                            className="group flex items-center gap-3 bg-gray-700 border border-gray-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-600 transition-all">
@@ -187,7 +188,8 @@ export default function HomeClientPage() {
                    <p className="text-gray-400 text-lg mb-6">
                        Acesse as configurações para personalizar seu perfil e começar a receber apoio dos seus fãs!
                    </p>
-                    <LoginDialog />
+                    {/* <LoginDialog/>  */}
+                    <BotaoDialog/>
                </div>
            </section>
 

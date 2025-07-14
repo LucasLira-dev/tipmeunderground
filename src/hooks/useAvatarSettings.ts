@@ -12,7 +12,7 @@ interface AlertMessage {
 export function useAvatarSettings() {
   const { data: session, update } = useSession();
   
-  const [avatarAtual, setAvatarAtual] = useState<string>("/default-avatar.jpg");
+  const [avatarAtual, setAvatarAtual] = useState<string>("/notPhoto.png");
   const [avatarSelecionado, setAvatarSelecionado] = useState<string>("");
   const [salvandoAvatar, setSalvandoAvatar] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<AlertMessage | null>(null);
