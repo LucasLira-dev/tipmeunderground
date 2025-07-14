@@ -1,165 +1,6 @@
-// interface SettingsFormData {
-//   pixKey: string;
-//   pixKeyType: string | number; // Assuming pixKeyType is a string or number
-//   pixName: string;
-//   pixCity: string;
-//   // Add other fields as needed, for example:
-//   // paypal: string;
-// }
-
-// interface PaymentSettingsFormProps {
-//   pixKey: string;
-//   pixKeyType: string | number; // Assuming pixKeyType is a string or number
-//   pixName: string;
-//   pixCity: string;
-//   onUpdateField: (field: keyof SettingsFormData, value: string) => void;
-//   errors?: {
-//     pixKey?: string;
-//     pixKeyType?: string;
-//     pixName?: string;
-//     pixCity?: string;
-//   };
-// }
-
-// export function PaymentSettingsForm({
-//   pixKey,
-//   pixKeyType, // Assuming this is used somewhere in the form
-//   pixName, 
-//   pixCity,
-//   onUpdateField,
-//   errors = {},
-// }: PaymentSettingsFormProps) {
-
-//   // ← TIPOS DE CHAVE PIX
-//   const pixTypes = [
-//     { value: "", label: "Selecione o tipo de chave" },
-//     { value: "cpf", label: "CPF" },
-//     { value: "cnpj", label: "CNPJ" },
-//     { value: "celular", label: "Celular" },
-//     { value: "email", label: "E-mail" },
-//     { value: "aleatoria", label: "Chave Aleatória" },
-//   ];
-
-//   // ← PLACEHOLDERS DINÂMICOS
-//   const getPixPlaceholder = (type: string) => {
-//     switch (type) {
-//       case "cpf":
-//         return "000.000.000-00";
-//       case "cnpj":
-//         return "00.000.000/0000-00";
-//       case "celular":
-//         return "+5599999-9999";
-//       case "email":
-//         return "seuemail@exemplo.com";
-//       case "aleatoria":
-//         return "00000000-0000-0000-0000-000000000000";
-//       default:
-//         return "Selecione o tipo primeiro";
-//     }
-//   }
-
-//   // ← APENAS FORMATAÇÃO, NÃO VALIDAÇÃO
-//   const formatPixKey = (value: string | number, type: string) => {
-//     switch (type) {
-//       case "cpf":
-//         return String(value)
-//           .replace(/\D/g, '')
-//           .replace(/(\d{3})(\d)/, '$1.$2')
-//           .replace(/(\d{3})(\d)/, '$1.$2')
-//           .replace(/(\d{3})(\d{1,2})/, '$1-$2')
-//           .replace(/(-\d{2})\d+?$/, '$1');
-      
-//       case "cnpj":
-//         return String(value)
-//           .replace(/\D/g, '')
-//           .replace(/(\d{2})(\d)/, '$1.$2')
-//           .replace(/(\d{3})(\d)/, '$1.$2')
-//           .replace(/(\d{3})(\d)/, '$1/$2')
-//           .replace(/(\d{4})(\d{1,2})/, '$1-$2')
-//           .replace(/(-\d{2})\d+?$/, '$1');
-      
-//       case "celular":
-//         return String(value)
-//           .replace(/\D/g, '')
-//           .replace(/(\d{2})(\d)/, '($1) $2')
-//           .replace(/(\d{5})(\d{1,4})/, '$1-$2')
-//           .replace(/(-\d{4})\d+?$/, '$1');
-      
-//       default:
-//         return value;
-//     }
-//   };
-
-
-//   const handlePixKeyChange = (value: string | number) => {
-//     const formattedValue = formatPixKey(value, pixKeyType);
-//     onUpdateField("pixKey", formattedValue);
-//   };
-
-//   return (
-//     <article className="border border-[var(--soft-presence)] bg-[var(--bg-secondary)] p-6 rounded-xl">
-//       <h2 className="text-[var(--bright-azure)] text-xl font-semibold mb-4">
-//         Configurações de Pagamento
-//       </h2>
-//       <p className="text-[var(--soft-cyan)] text-sm mb-4">
-//         Configure como receber apoios
-//       </p>
-      
-//       <div
-//       className="grid gap-2 md:grid-cols-2">
-//           <div>
-//             <label className="text-[var(--soft-cyan)] text-sm font-semibold">
-//               Chave PIX
-//             </label>
-//             <input
-//               type="text"
-//               value={pixKey}
-//               onChange={(e) => onUpdateField("pixKey", e.target.value)}
-//               className="w-full p-3 bg-black/50 border border-sky-400/30 focus:border-sky-300 rounded-md focus:outline-none text-sky-100 mt-1"
-//               placeholder="Digite sua chave PIX"
-//             />
-//           </div>
-
-//           <div>
-//             <label className="text-[var(--soft-cyan)] text-sm font-semibold">
-//               Nome completo
-//             </label>
-//             <input
-//               type="text"
-//               value={pixName}
-//               onChange={(e) => onUpdateField("pixName", e.target.value)}
-//               className="w-full p-3 bg-black/50 border border-sky-400/30 focus:border-sky-300 rounded-md focus:outline-none text-sky-100 mt-1"
-//               placeholder="Digite seu nome completo"
-//             />
-//             </div>
-        
-//             <div>
-//               <label className="text-[var(--soft-cyan)] text-sm font-semibold">
-//                 Cidade
-//               </label>
-//             <input
-//               type="text"
-//               value={pixCity}
-//               onChange={(e) => onUpdateField("pixCity", e.target.value)}
-//               className="w-full p-3 bg-black/50 border border-sky-400/30 focus:border-sky-300 rounded-md focus:outline-none text-sky-100 mt-1"
-//               placeholder="Digite sua cidade"
-//             />
-//             </div>
-        
-//           <div>
-//             <label className="text-[var(--soft-cyan)] text-sm font-semibold">
-//               PayPal
-//             </label>
-//             <input
-//               type="email"
-//               placeholder="Digite seu email do PayPal"
-//               className="w-full p-3 bg-black/50 border border-sky-400/30 focus:border-sky-300 rounded-md focus:outline-none text-sky-100 mt-1"
-//             />
-//           </div>
-//       </div>
-//     </article>
-//   );
-// } 
+import { GoKey } from "react-icons/go";
+import { FaRegUser, FaMapMarkerAlt } from "react-icons/fa";
+import { MdPayment } from "react-icons/md";
 
 
 
@@ -333,8 +174,9 @@ export function PaymentSettingsForm({
 
   return (
     <article className="border border-[var(--soft-presence)] bg-[var(--bg-secondary)] p-6 rounded-xl">
-      <h2 className="text-[var(--bright-azure)] text-xl font-semibold mb-4">
-        💳 Configurações de Pagamento
+      <h2 className="text-[var(--bright-azure)] text-xl font-semibold mb-4 flex items-center gap-1">
+        <MdPayment className="inline-block mr-2" />
+        Configurações de Pagamento
       </h2>
       <p className="text-[var(--soft-cyan)] text-sm mb-6">
         Configure como receber apoios e doações
@@ -345,6 +187,7 @@ export function PaymentSettingsForm({
         {/* ← TIPO DE CHAVE PIX */}
         <div className="md:col-span-2">
           <label className="text-[var(--soft-cyan)] text-sm font-semibold block mb-2">
+            <GoKey className="inline-block mr-2" />
             Tipo de Chave PIX
           </label>
           <select
@@ -403,6 +246,7 @@ export function PaymentSettingsForm({
         {/* ← NOME COMPLETO */}
         <div>
           <label className="text-[var(--soft-cyan)] text-sm font-semibold block mb-2">
+            <FaRegUser className="inline-block mr-2" />
             Nome Completo
           </label>
           <input
@@ -424,6 +268,7 @@ export function PaymentSettingsForm({
         {/* ← CIDADE */}
         <div>
           <label className="text-[var(--soft-cyan)] text-sm font-semibold block mb-2">
+            <FaMapMarkerAlt className="inline-block mr-2" />
             Cidade
           </label>
           <input

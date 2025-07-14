@@ -2,6 +2,7 @@
 // src/components/Settings/AvatarSection.tsx
 import Image from "next/image";
 import { BiCheck } from "react-icons/bi";
+import { FaCamera } from "react-icons/fa";
 
 interface AvatarSectionProps {
   avatarAtual: string;
@@ -37,7 +38,8 @@ export function AvatarSection({
 
   return (
     <article className="border border-[var(--soft-presence)] bg-[var(--bg-secondary)] p-6 rounded-xl">
-      <h2 className="text-[var(--bright-azure)] text-xl font-semibold mb-4">
+      <h2 className="text-[var(--bright-azure)] text-xl font-semibold mb-4 flex items-center gap-1">
+        <FaCamera className="inline-block mr-2" />
         Avatar
       </h2>
       

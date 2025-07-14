@@ -1,3 +1,5 @@
+import { FiLink } from "react-icons/fi";
+import { FaInstagram, FaYoutube, FaSpotify } from "react-icons/fa";
 
 // Define SettingsFormData type if not already imported
 type SettingsFormData = {
@@ -24,7 +26,8 @@ export function SocialLinksForm({
 }: SocialLinksFormProps) {
   return (
     <article className="border border-[var(--soft-presence)] bg-[var(--bg-secondary)] p-6 rounded-xl">
-      <h2 className="text-[var(--bright-azure)] text-xl font-semibold mb-4">
+      <h2 className="text-[var(--bright-azure)] text-xl font-semibold mb-4 flex items-center gap-1">
+        <FiLink className="inline-block mr-2" />
         Redes Sociais
       </h2>
       <p className="text-[var(--soft-cyan)] text-sm mb-4">
@@ -33,7 +36,8 @@ export function SocialLinksForm({
       
       <div className="grid gap-4 md:grid-cols-2">
         <div>
-          <label className="text-[var(--soft-cyan)] text-sm font-semibold">
+          <label className="text-[var(--soft-cyan)] text-sm font-semibold flex items-center">
+            <FaInstagram className="inline-block mr-2" />
             Instagram
           </label>
           <input
@@ -46,7 +50,8 @@ export function SocialLinksForm({
         </div>
 
         <div>
-          <label className="text-[var(--soft-cyan)] text-sm font-semibold">
+          <label className="text-[var(--soft-cyan)] text-sm font-semibold flex items-center">
+            <FaSpotify className="inline-block mr-2" />
             Spotify
           </label>
           <input
@@ -59,7 +64,8 @@ export function SocialLinksForm({
         </div>
 
         <div>
-          <label className="text-[var(--soft-cyan)] text-sm font-semibold">
+          <label className="text-[var(--soft-cyan)] text-sm font-semibold flex items-center">
+            <FaYoutube className="inline-block mr-2" />
             YouTube
           </label>
           <input

@@ -1,5 +1,9 @@
-import { FaRegEyeSlash } from "react-icons/fa";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { FaRegEyeSlash, FaCheck } from "react-icons/fa";
+import { MdOutlineRemoveRedEye, MdLock } from "react-icons/md";
+import { CiSettings } from "react-icons/ci";
+import { HiOutlineMail } from "react-icons/hi";
+import { IoMdUnlock } from "react-icons/io";
+
 
 interface SettingsFormData {
   email: string;
@@ -29,7 +33,8 @@ export function AccountSettingsForm({
 }: AccountSettingsFormProps) {
   return (
     <article className="border border-[var(--soft-presence)] bg-[var(--bg-secondary)] p-6 rounded-xl">
-      <h2 className="text-[var(--bright-azure)] text-xl font-semibold mb-4">
+      <h2 className="text-[var(--bright-azure)] text-xl font-semibold mb-4 flex items-center gap-1">
+        <CiSettings className="inline-block mr-2" />
         Configurações da Conta
       </h2>
       <p className="text-[var(--soft-cyan)] text-sm mb-4">
@@ -39,6 +44,7 @@ export function AccountSettingsForm({
       <div className="grid gap-4">
         <div>
           <label className="text-[var(--soft-cyan)] text-sm font-semibold">
+            <HiOutlineMail className="inline-block mr-2" />
             Email
           </label>
           <input
@@ -53,6 +59,7 @@ export function AccountSettingsForm({
         <div className="grid gap-4 md:grid-cols-3">
           <div>
             <label className="text-[var(--soft-cyan)] text-sm font-semibold">
+              <MdLock className="inline-block mr-2" />
               Senha Atual
             </label>
             <div className="relative">
@@ -78,6 +85,7 @@ export function AccountSettingsForm({
 
           <div>
             <label className="text-[var(--soft-cyan)] text-sm font-semibold">
+              <IoMdUnlock className="inline-block mr-2" />
               Nova Senha
             </label>
             <input
@@ -91,6 +99,7 @@ export function AccountSettingsForm({
 
           <div>
             <label className="text-[var(--soft-cyan)] text-sm font-semibold">
+              <FaCheck className="inline-block mr-2" />
               Confirmar Nova Senha
             </label>
             <input
