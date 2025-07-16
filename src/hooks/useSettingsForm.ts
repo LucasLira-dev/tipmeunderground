@@ -43,7 +43,7 @@ interface AlertMessage {
 }
 
 export function useSettingsForm() {
-  const { data: session} = useSession();
+  const { data: session, update} = useSession();
 
   const [paginaCarregada, setPaginaCarregada] = useState(false);
   const [salvandoPerfil, setSalvandoPerfil] = useState(false);
@@ -404,6 +404,10 @@ export function useSettingsForm() {
       // Atualizar estado local
       await updateLocalState();
 
+      if(typeof update === "function") {
+        await update();
+      }
+
       setAlertMessage({
         title: "Boa!",
         message: "Perfil atualizado com sucesso!",
@@ -473,4 +477,3 @@ export function useSettingsForm() {
 }
 
 
-//00020126360014BR.GOV.BCB.PIX0114+5588992633322520400005303986540520.005802BR5920LUCAS GOSTOSO MENDES6007MOMBACA62190515TXANPW0G8348827630469A8

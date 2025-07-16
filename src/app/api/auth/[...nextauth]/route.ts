@@ -2,6 +2,12 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
 
+declare module "next-auth" {
+  interface User {
+    accessToken?: string;
+  }
+}
+
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "https://tipme-backend-s3nk.onrender.com";
 
 const authOptions: NextAuthOptions = {
@@ -46,7 +52,7 @@ const authOptions: NextAuthOptions = {
           return {
             id: data.token.user?.userId || "",
             email: credentials.userMail,
-            token: tokenValue,
+            accessToken: tokenValue,
           };
 
         } catch (error) {
@@ -58,17 +64,23 @@ const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       // Quando o login acontece
-      if (user) {
-        token.accessToken = user.token;
+      if (user || trigger === "update") {
+        const acesssToken = user?.accessToken || token.accessToken;
+        console.log("=== JWT CALLBACK ===");
+
+        if (!acesssToken) {
+          console.error("Token não encontrado");
+          return token;
+        }
 
         try { 
 
           const res = await fetch(`${backendUrl}/users/all-info`, {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${user.token}`,
+              Authorization: `Bearer ${acesssToken}`,
             }
           },
         );
@@ -84,6 +96,8 @@ const authOptions: NextAuthOptions = {
           token.userLink1 = userData.userLink1;
           token.userLink2 = userData.userLink2;
           token.userLink3 = userData.userLink3;
+          token.accessToken = acesssToken;
+          console.log("Dados do usuário:", userData);
 
         } catch (err) {
           console.error("Erro ao buscar dados do usuário:", err);

@@ -6,7 +6,6 @@ const HomePage = async () => {
   const session = await getServerSession();
   if (!session) {
     redirect("/");
-    return null;
   }
   return <HomeClientPage />;
 };
