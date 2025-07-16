@@ -27,7 +27,7 @@ async function CadastrarUsuario(
 
          setIsLoading(true)
 
-         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://tipme-backend.onrender.com';
+         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://tipme-backend-s3nk.onrender.com';
     
         const response = await fetch(`${backendUrl}/users/register`, {
             method: 'POST',
