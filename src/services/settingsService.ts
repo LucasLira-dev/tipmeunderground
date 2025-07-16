@@ -4,7 +4,7 @@ interface UpdateProfileData {
   userName?: string;
   userMail?: string;
   userPassword?: string;
-  password: string; // senha atual para validação
+  password: string;
 }
 
 interface UpdatesData {
