@@ -20,7 +20,6 @@ export function useAvatarSettings() {
   // ← CORRIGIR: Sincronizar com a sessão sempre que mudar
   useEffect(() => {
     if (session?.user?.avatar) {
-      console.log("🔄 Avatar da sessão encontrado:", session.user.avatar);
       setAvatarAtual(session.user.avatar);
       
       // ← CORRIGIR: Só atualizar selecionado se não há um avatar sendo selecionado
@@ -32,7 +31,6 @@ export function useAvatarSettings() {
 
   // ← FUNÇÃO PARA SELECIONAR AVATAR
   const handleAvatarSelect = (avatar: string) => {
-    console.log("🎯 Avatar selecionado:", avatar);
     setAvatarSelecionado(avatar);
   };
 
@@ -59,7 +57,6 @@ export function useAvatarSettings() {
     setSalvandoAvatar(true);
 
     try {
-      console.log("🔄 Atualizando avatar de:", avatarAtual, "para:", avatarSelecionado);
       
       const response = await settingsService.updateAvatar(
         { avatarUrl: avatarSelecionado },
@@ -71,8 +68,6 @@ export function useAvatarSettings() {
         throw new Error(errorData.message || "Erro ao atualizar avatar");
       }
 
-      console.log("✅ Avatar atualizado com sucesso!");
-      
       // ← CORRIGIR: Atualizar estado local primeiro
       const novoAvatar = avatarSelecionado;
       setAvatarAtual(novoAvatar);

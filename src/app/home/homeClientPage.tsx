@@ -23,7 +23,6 @@ export default function HomeClientPage() {
        if (status === "loading") return; // Aguarda verificação de sessão
        
        if (!session) {
-           console.log("❌ Usuário não autenticado, redirecionando para /");
            router.push("/");
            return;
        }
@@ -33,9 +32,7 @@ export default function HomeClientPage() {
        if (session?.accessToken) {
         try {
            const decoded = jwtDecode<TokenPayload>(session.accessToken);
-           console.log("User ID:", decoded.userId);
            const userIdFromToken = decoded.userId;
-           console.log("User ID from token:", userIdFromToken);
            setUserId(userIdFromToken);
        } catch (error) {
            console.error("Erro ao decodificar o token JWT:", error);

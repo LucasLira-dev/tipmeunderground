@@ -54,8 +54,6 @@ class ProfileService {
        
          const endpoint = `/pix/get-pix/${data.userId}?value=${data.value}`;
         
-        console.log("🔗 Endpoint final:", endpoint);
-        
         return this.makeRequest(endpoint, "GET"); // ← GET sem body
     }
 

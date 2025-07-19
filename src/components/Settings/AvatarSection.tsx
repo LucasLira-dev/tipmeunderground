@@ -18,7 +18,6 @@ export function AvatarSection({
   avatarAtual,
   avatarSelecionado,
   salvandoAvatar,
-  avatarMudou,
   avatars,
   onAvatarSelect,
   onUpdateAvatar,
@@ -29,12 +28,6 @@ export function AvatarSection({
 
   const avatarParaMostrar = avatarSelecionado || avatarAtual;
   
-  console.log("🔍 Debug Avatar:", {
-    avatarAtual,
-    avatarSelecionado,
-    avatarMudou,
-    avatarEfetivamenteMudou
-  });
 
   return (
     <article className="border border-[var(--soft-presence)] bg-[var(--bg-secondary)] p-6 rounded-xl">

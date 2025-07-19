@@ -1,141 +1,4 @@
-// 'use client'
 
-// import { useState } from 'react';
-// import { profileService } from "@/services/profileServices";
-
-// interface PixDonationFormProps {
-//   userId: string;
-// }
-
-// export function PixDonationForm({ userId }: PixDonationFormProps) {
-//   const [valor, setValor] = useState<number>(0);
-//   const [chavePix, setChavePix] = useState<string | null>(null);
-//   const [loading, setLoading] = useState<boolean>(false);
-//   const [error, setError] = useState<string | null>(null);
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-    
-//     if (valor <= 0) {
-//       setError('Digite um valor válido');
-//       return;
-//     }
-
-//     if (!userId) {
-//       setError('Usuário não encontrado');
-//       return;
-//     }
-
-//     setLoading(true);
-//     setError(null);
-//     setChavePix(null);
-    
-//     try {
-//       console.log('🔄 Buscando PIX para:', { userId, valor });
-      
-//       const response = await profileService.getPix({ userId, value: valor });
-
-//       if (!response.ok) {
-//         const errorData = await response.json();
-//         throw new Error(errorData.message || 'Erro ao buscar PIX');
-//       }
-
-//       const data = await response.json();
-//       const pixKey = data.payload;
-
-//       setChavePix(pixKey);
-//       console.log('✅ Chave PIX recebida:', pixKey);
-      
-//     } catch (error) {
-//       console.error('❌ Erro ao buscar PIX:', error);
-//       setError(error instanceof Error ? error.message : 'Erro ao buscar PIX');
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleCopyPix = async () => {
-//     if (!chavePix) return;
-    
-//     try {
-//       await navigator.clipboard.writeText(chavePix);
-//       // Você pode adicionar um toast/feedback aqui
-//       console.log('📋 PIX copiado para a área de transferência');
-//     } catch (error) {
-//       console.error('❌ Erro ao copiar PIX:', error);
-//     }
-//   };
-
-//   const handleClearPix = () => {
-//     setChavePix(null);
-//     setValor(0);
-//     setError(null);
-//   };
-
-//   return (
-//     <div className="bg-gray-800 p-6 rounded-lg">
-//       <h2 className="text-white text-lg mb-4 font-semibold">💰 Quer fazer uma doação?</h2>
-
-//       <form className="space-y-4" onSubmit={handleSubmit}>
-//         <div>
-//           <label className="block text-white text-sm font-medium mb-2">
-//             Valor (R$)
-//           </label>
-//           <input
-//             type="number"
-//             value={valor}
-//             placeholder="Digite o valor"
-//             min="1"
-//             step="0.01"
-//             required
-//             disabled={loading}
-//             className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
-//             onChange={(e) => setValor(Number(e.target.value))}
-//           />
-//         </div>
-
-//         {/* ← MOSTRAR ERRO SE HOUVER */}
-//         {error && (
-//           <div className="p-3 bg-red-500/20 border border-red-500/30 rounded-md">
-//             <p className="text-red-400 text-sm">❌ {error}</p>
-//           </div>
-//         )}
-        
-//         <button
-//           type="submit"
-//           disabled={loading || valor <= 0 || !userId}
-//           className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-md transition-colors"
-//         >
-//           {loading ? '🔄 Buscando...' : '💳 Fazer Doação'}
-//         </button>
-//       </form>
-
-//       {/* ← MOSTRAR CHAVE PIX QUANDO RECEBIDA */}
-//       {chavePix && (
-//         <div className="mt-6 p-4 bg-green-800/30 border border-green-500/30 rounded-lg">
-//           <h3 className="text-green-400 font-semibold mb-2">✅ Chave PIX encontrada:</h3>
-//           <div className="bg-gray-900 p-3 rounded-md">
-//             <p className="text-white font-mono text-sm break-all">{chavePix}</p>
-//           </div>
-//           <div className="mt-3 flex gap-2">
-//             <button
-//               onClick={handleCopyPix}
-//               className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors"
-//             >
-//               📋 Copiar
-//             </button>
-//             <button
-//               onClick={handleClearPix}
-//               className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors"
-//             >
-//               🗑️ Limpar
-//             </button>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }  
 'use client'
 
 import { useState } from 'react';
@@ -173,8 +36,7 @@ export function PixDonationForm({ userId, userName }: PixDonationFormProps) {
     setChavePix(null);
     
     try {
-      console.log('🔄 Buscando PIX para:', { userId, valor });
-      
+     
       const response = await profileService.getPix({ userId, value: valor });
 
       if (!response.ok) {
@@ -187,7 +49,6 @@ export function PixDonationForm({ userId, userName }: PixDonationFormProps) {
 
       setChavePix(pixKey);
       setShowModal(true);
-      console.log('✅ Chave PIX recebida:', pixKey);
       
     } catch (error) {
       console.error('❌ Erro ao buscar PIX:', error);
@@ -203,7 +64,6 @@ export function PixDonationForm({ userId, userName }: PixDonationFormProps) {
     try {
       await navigator.clipboard.writeText(chavePix);
       setCopied(true);
-      console.log('📋 PIX copiado para a área de transferência');
       
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {

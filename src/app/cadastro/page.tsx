@@ -97,8 +97,6 @@ export default function CadastroPage() {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const { data: session, status } = useSession();
-    console.log("Sessão atual:", session); // Verifica se está salva
-    console.log("Status:", status); 
     
     // Redireciona se já estiver autenticado
     useEffect(() => {

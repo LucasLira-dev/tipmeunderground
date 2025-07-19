@@ -20,12 +20,8 @@ export function useUserProfile(userId: string): UseUserProfileReturn {
       setLoading(true);
       setError(null);
       
-      console.log("🔄 Buscando dados do perfil para:", userId);
-      
       const data = await profileService.getUserProfile({userId});
       setUserData(data);
-      
-      console.log("✅ Dados do perfil carregados:", data);
       
     } catch (err) {
       console.error("❌ Erro ao buscar perfil:", err);

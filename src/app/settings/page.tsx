@@ -77,10 +77,8 @@ export default function SettingsPage() {
     "/avatar1.jpg", "/avatar2.jpg"
   ];
 
-  console.log("Status:", status, "Página carregada:", paginaCarregada); // ← DEBUG
 
   if (!paginaCarregada || verificandoToken) {
-    console.log("mostrando loading")
     return (
       <div className="flex items-center justify-center h-screen bg-black">
         <LoadingSpinner size="lg" text="Carregando..." />
@@ -88,7 +86,6 @@ export default function SettingsPage() {
     );
   }
 
-  console.log("Renderizando página..."); // ← DEBUG
 
   return (
     <main className="bg-[var(--midnight-black)] flex items-center text-black min-h-screen flex-col p-2">

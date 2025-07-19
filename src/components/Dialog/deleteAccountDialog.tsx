@@ -50,8 +50,6 @@ export function DeleteAccountDialog() {
     setError("");
 
     try {
-      console.log("🗑️ Deletando conta...");
-      console.log("📧 Email:", session.user.email);
 
       // ← USAR O settingsService
       const response = await settingsService.deleteAccount(
@@ -62,15 +60,12 @@ export function DeleteAccountDialog() {
         session.accessToken || ""
       );
 
-      console.log("📊 Response:", response);
 
       if (!response.ok) {
         const errorData = await response.json();
         console.error("❌ Erro da API:", errorData);
         throw new Error(errorData.message || "Erro ao deletar conta");
       }
-
-      console.log("✅ Conta deletada com sucesso!");
       
       // ← FECHAR DIALOG E FAZER LOGOUT
       setIsOpen(false);

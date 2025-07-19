@@ -20,9 +20,6 @@ const authOptions: NextAuthOptions = {
         userPassword: { label: "Senha", type: "password" },
       },
       async authorize(credentials) {
-        console.log("=== AUTHORIZE ===");
-        console.log("Credentials:", credentials);
-
         if (!credentials?.userMail || !credentials?.userPassword) {
           return null;
         }
@@ -38,7 +35,6 @@ const authOptions: NextAuthOptions = {
           });
 
           const data = await res.json();
-          console.log("Resposta da API:", data);
 
           if (!res.ok || !data.token?.token) {
             console.log("Login falhou");
@@ -46,7 +42,6 @@ const authOptions: NextAuthOptions = {
           }
 
           const tokenValue = data.token.token;
-          console.log("Token extraído:", tokenValue);
 
           // ← Retornar apenas o token (demais dados serão buscados no jwt())
           return {
@@ -68,7 +63,6 @@ const authOptions: NextAuthOptions = {
       // Quando o login acontece
       if (user || trigger === "update") {
         const acesssToken = user?.accessToken || token.accessToken;
-        console.log("=== JWT CALLBACK ===");
 
         if (!acesssToken) {
           console.error("Token não encontrado");
@@ -97,7 +91,6 @@ const authOptions: NextAuthOptions = {
           token.userLink2 = userData.userLink2;
           token.userLink3 = userData.userLink3;
           token.accessToken = acesssToken;
-          console.log("Dados do usuário:", userData);
 
         } catch (err) {
           console.error("Erro ao buscar dados do usuário:", err);

@@ -221,12 +221,6 @@ export function useSettingsForm() {
         throw new Error("O nome completo deve conter pelo menos dois nomes.");
       }
       
-      console.log("✅ Dados PIX válidos:", {
-        pixKeyType: formData.pixKeyType,
-        pixKey: formData.pixKey,
-        pixName: formData.pixName,
-        pixCity: formData.pixCity
-      });
     }
 
     // Verificar se precisa de senha atual (apenas para userName, email ou senha)
@@ -265,19 +259,16 @@ export function useSettingsForm() {
 
     // Validar links (apenas se preenchidos)
     if (formData.instagram.trim()) {
-      console.log("🔍 Validando Instagram:", formData.instagram);
       if (!isValidInstagram(formData.instagram)) {
         throw new Error("O link do Instagram não é válido.");
       }
     }
     if (formData.spotify.trim()) {
-      console.log("🔍 Validando Spotify:", formData.spotify);
       if (!isValidSpotify(formData.spotify)) {
         throw new Error("O link do Spotify não é válido.");
       }
     }
     if (formData.youtube.trim()) {
-      console.log("🔍 Validando YouTube:", formData.youtube);
       if (!isValidYoutube(formData.youtube)) {
         throw new Error("O link do YouTube não é válido.");
       }
@@ -313,9 +304,6 @@ export function useSettingsForm() {
     setSalvandoPerfil(true);
 
     try {
-      console.log("🚀 Iniciando salvamento...");
-      console.log("📝 Dados atuais:", formData);
-      console.log("💾 Dados salvos:", dadosSalvos);
       
       // Validar formulário
       validateForm();
@@ -369,12 +357,6 @@ export function useSettingsForm() {
         updates.pixName = formData.pixName;
         updates.pixCity = formData.pixCity;
 
-        console.log("📱 PIX adicionado:", {
-          pixKeyType: formData.pixKeyType,
-          pixKey: formData.pixKey,
-          pixName: formData.pixName,
-          pixCity: formData.pixCity
-        });
       }
 
       // Verificar se há algo para enviar
@@ -382,7 +364,6 @@ export function useSettingsForm() {
         throw new Error("Nenhuma alteração detectada para salvar.");
       }
 
-      console.log("📤 Enviando atualizações:", updates);
 
       // Executar atualizações
       const responses = await settingsService.updateMultipleFields(
@@ -428,7 +409,6 @@ export function useSettingsForm() {
 
   // ← ATUALIZAR ESTADO LOCAL
   const updateLocalState = async () => {
-    console.log("🔄 Atualizando estado local...");
 
     const newSavedData = {
       userName: formData.userName,
